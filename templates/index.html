@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electronic Shop | All Electronics & Hardware</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Main Navigation Bar -->
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="/" class="logo">⚡ Electronic<span>Shop</span></a>
+            </div>
+            
+            <div class="nav-search">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="searchInput" placeholder="Search across 139+ electronics, accessories and more..." />
+            </div>
+
+            <div class="nav-actions">
+                <button class="nav-btn add-btn" id="openAddModalBtn">
+                    <i class="fa-solid fa-plus-circle"></i>
+                    <span>Add Item</span>
+                </button>
+                <button class="nav-btn" id="compareNavBtn">
+                    <i class="fa-solid fa-code-compare"></i>
+                    <span>Compare</span>
+                    <span class="badge-count" id="compareCount">0</span>
+                </button>
+                <button class="nav-btn" id="cartNavBtn">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span>Cart</span>
+                    <span class="badge-count" id="cartCount">0</span>
+                </button>
+                <div class="user-menu">
+                    <button class="nav-btn" id="userMenuBtn">
+                        <i class="fa-solid fa-user-circle"></i>
+                        <span id="userMenuLabel">Account</span>
+                    </button>
+                    <div class="user-dropdown" id="userDropdown" style="display: none;">
+                        <div id="userDropdownContent"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Quick Category Horizontal Strip -->
+    <div class="category-strip">
+        <div class="category-strip-inner" id="categoryContainer"></div>
+    </div>
+
+    <!-- Main Content Container -->
+    <main class="container">
+        <!-- Controls Bar -->
+        <section class="controls-section">
+            <div class="controls-summary">
+                <h2>Product Catalog</h2>
+                <p id="resultsStats">Loading items...</p>
+            </div>
+            <div class="filter-controls">
+                <select id="priceFilter">
+                    <option value="ALL">All Prices</option>
+                    <option value="UNDER_2000">Under ₹2,000</option>
+                    <option value="2000_TO_10000">₹2,000 – ₹10,000</option>
+                    <option value="OVER_10000">Over ₹10,000</option>
+                </select>
+                <select id="sortFilter">
+                    <option value="DEFAULT">Featured</option>
+                    <option value="PRICE_ASC">Price: Low to High</option>
+                    <option value="PRICE_DESC">Price: High to Low</option>
+                    <option value="RATING_DESC">Highest Rated</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- Product Grid -->
+        <section class="catalog-section" id="catalog">
+            <div class="product-grid" id="productGrid"></div>
+
+            <div id="noResults" class="no-results hidden">
+                <i class="fa-solid fa-box-open empty-icon"></i>
+                <p>No electronics found matching your filters.</p>
+                <button class="btn-reset" onclick="resetFilters()">Reset Filters</button>
+            </div>
+
+            <!-- Pagination Controls -->
+            <div class="pagination-container" id="pagination">
+                <button id="prevPage" class="page-btn"><i class="fa-solid fa-chevron-left"></i> Previous</button>
+                <span id="pageIndicator" class="page-indicator">Page 1</span>
+                <button id="nextPage" class="page-btn">Next <i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="contact-section">
+            <div class="contact-card">
+                <h2>Have Questions or Bulk Inquiries?</h2>
+                <p class="subtitle">Contact our electronics hardware desk for immediate assistance.</p>
+                <form id="contactForm" novalidate>
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" placeholder="John Doe">
+                        <small class="error-msg" id="nameError"></small>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="example@mail.com">
+                        <small class="error-msg" id="emailError"></small>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="4" placeholder="Ask about product availability or bulk orders..."></textarea>
+                        <small class="error-msg" id="messageError"></small>
+                    </div>
+                    <button type="submit" id="submitBtn">Send Inquiry</button>
+                    <div id="formStatus" class="form-status"></div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal: Add New Product -->
+    <div class="modal-overlay" id="addProductModal">
+        <div class="form-modal">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-circle-plus"></i> Add New Product</h3>
+                <button class="close-btn" onclick="closeAddProduct()">&times;</button>
+            </div>
+            <form id="newProductForm" class="modal-body">
+                <div class="form-group">
+                    <label>Product Name *</label>
+                    <input type="text" id="newProdName" required placeholder="e.g. Mechanical Gaming Keyboard">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Brand</label>
+                        <input type="text" id="newProdBrand" placeholder="e.g. KeyMaster">
+                    </div>
+                    <div class="form-group">
+                        <label>Category *</label>
+                        <input type="text" id="newProdCategory" required placeholder="e.g. Accessories">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Color</label>
+                        <input type="text" id="newProdColor" placeholder="e.g. Black">
+                    </div>
+                    <div class="form-group">
+                        <label>Variant/Storage</label>
+                        <input type="text" id="newProdVariant" placeholder="e.g. Red Switches">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Price (₹ INR) *</label>
+                        <input type="number" id="newProdPrice" step="1" required placeholder="4999">
+                    </div>
+                    <div class="form-group">
+                        <label>Original Price (₹ INR)</label>
+                        <input type="number" id="newProdOriginalPrice" step="1" placeholder="6249">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Stock Units *</label>
+                        <input type="number" id="newProdStock" required placeholder="20">
+                    </div>
+                    <div class="form-group">
+                        <label>Rating (1 - 5)</label>
+                        <input type="number" id="newProdRating" step="0.1" min="1" max="5" value="4.5">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Image URL (Optional)</label>
+                    <input type="url" id="newProdImage" placeholder="https://images.unsplash.com/...">
+                </div>
+                <button type="submit" class="btn-submit-item">Save & Publish to Store</button>
+                <div id="addProductStatus" class="form-status"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal-overlay" id="loginModal" onclick="closeLogin()">
+        <div class="auth-modal" onclick="event.stopPropagation()">
+            <div class="auth-container">
+                <div class="auth-header">
+                    <h2><i class="fa-solid fa-right-to-bracket"></i> Login to Your Account</h2>
+                    <button class="close-btn" onclick="closeLogin()">&times;</button>
+                </div>
+                <form id="loginForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="loginEmail">Email Address *</label>
+                        <input type="email" id="loginEmail" required placeholder="your-email@gmail.com">
+                        <small class="error-msg" id="loginEmailError"></small>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password *</label>
+                        <input type="password" id="loginPassword" required placeholder="Enter your password">
+                        <small class="error-msg" id="loginPasswordError"></small>
+                    </div>
+                    <button type="submit" class="btn-auth-submit">Login</button>
+                    <div id="loginStatus" class="form-status"></div>
+                    <div class="auth-divider">OR</div>
+                    <p class="auth-toggle">Don't have an account? <a href="#" onclick="switchToRegister()">Register here</a></p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal-overlay" id="registerModal" onclick="closeRegister()">
+        <div class="auth-modal" onclick="event.stopPropagation()">
+            <div class="auth-container">
+                <div class="auth-header">
+                    <h2><i class="fa-solid fa-user-plus"></i> Create New Account</h2>
+                    <button class="close-btn" onclick="closeRegister()">&times;</button>
+                </div>
+                <form id="registerForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="registerName">Full Name *</label>
+                        <input type="text" id="registerName" required placeholder="John Doe">
+                        <small class="error-msg" id="registerNameError"></small>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerEmail">Email Address *</label>
+                        <input type="email" id="registerEmail" required placeholder="your-email@gmail.com">
+                        <small class="error-msg" id="registerEmailError"></small>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword">Password *</label>
+                        <input type="password" id="registerPassword" required placeholder="Minimum 6 characters">
+                        <small class="error-msg" id="registerPasswordError"></small>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerConfirmPassword">Confirm Password *</label>
+                        <input type="password" id="registerConfirmPassword" required placeholder="Re-enter password">
+                        <small class="error-msg" id="registerConfirmError"></small>
+                    </div>
+                    <button type="submit" class="btn-auth-submit">Create Account</button>
+                    <div id="registerStatus" class="form-status"></div>
+                    <div class="auth-divider">OR</div>
+                    <p class="auth-toggle">Already have an account? <a href="#" onclick="switchToLogin()">Login here</a></p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shopping Cart Drawer -->
+    <div class="drawer-overlay" id="cartOverlay" onclick="closeCart()"></div>
+    <aside class="side-drawer" id="cartDrawer">
+        <div class="drawer-header">
+            <h3><i class="fa-solid fa-bag-shopping"></i> Shopping Cart</h3>
+            <button class="close-btn" onclick="closeCart()">&times;</button>
+        </div>
+        <div class="drawer-body" id="cartItemsContainer"></div>
+        <div class="drawer-footer">
+            <div class="summary-row">
+                <span>Subtotal:</span>
+                <span class="total-price" id="cartTotalDisplay">₹0</span>
+            </div>
+            <button class="btn-checkout" onclick="checkoutOrder()">Proceed to Checkout</button>
+        </div>
+    </aside>
+
+    <!-- Compare Modal -->
+    <div class="modal-overlay" id="compareOverlay">
+        <div class="compare-modal">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-code-compare"></i> Compare Selected Items</h3>
+                <button class="close-btn" onclick="closeCompare()">&times;</button>
+            </div>
+            <div class="modal-body" id="compareModalBody"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-top">
+            <div class="footer-col">
+                <h4>ABOUT</h4>
+                <ul>
+                    <li><a href="#contact">Contact Us</a></li>
+                    <li><a href="#catalog">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Corporate Information</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>HELP</h4>
+                <ul>
+                    <li><a href="#">Payments</a></li>
+                    <li><a href="#">Shipping & Delivery</a></li>
+                    <li><a href="#">Cancellations & Returns</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>CONSUMER POLICY</h4>
+                <ul>
+                    <li><a href="#">Terms of Use</a></li>
+                    <li><a href="#">Security</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Sitemap</a></li>
+                </ul>
+            </div>
+            <div class="footer-col contact-info">
+                <h4>REGISTERED OFFICE:</h4>
+                <p>Electronic Shop Private Limited,<br>Tech Hub Avenue, Ground Floor,<br>Outer Ring Road, India</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="bottom-links">
+                <span><i class="fa-solid fa-store"></i> Become a Seller</span>
+                <span><i class="fa-solid fa-rectangle-ad"></i> Advertise</span>
+                <span><i class="fa-solid fa-gift"></i> Gift Cards</span>
+                <span><i class="fa-solid fa-circle-question"></i> Help Center</span>
+            </div>
+            <div class="copyright">
+                © 2007-2026 ElectronicShop.com. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
