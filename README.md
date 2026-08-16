@@ -44,65 +44,6 @@ Electronic-Shop-Website/
 
 ```
 
-## ⚙️ Getting Started
-
-### Prerequisites
-
-Ensure you have the following installed:
-
-* Python 3.8 or higher
-* Git CLI
-
-### Clone Repository
-
-```bash
-git clone [https://github.com/dhananjaychaudhary99/Electronic-Shop-Website.git](https://github.com/dhananjaychaudhary99/Electronic-Shop-Website.git)
-cd Electronic-Shop-Website
-
-```
-
-### Set Up Virtual Environment
-
-* **Windows:**
-```bash
-python -m venv venv
-venv\Scripts\activate
-
-```
-
-
-* **macOS / Linux:**
-```bash
-python3 -m venv venv
-source venv/bin/activate
-
-```
-
-
-
-### Install Dependencies
-
-```bash
-pip install -r requirements.txt
-
-```
-
-### Run Application
-
-```bash
-python app.py
-
-```
-
-### Live Demo (Local Server)
-
-Once the server is running, open your browser and navigate to:
-
-```text
-[http://127.0.0.1:5000/](http://127.0.0.1:5000/)
-
-```
-
 ## 📌 Functionalities
 
 ### Product Catalog Exploration
