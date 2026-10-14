@@ -1,113 +1,276 @@
-```markdown
 # Electronic Shop Website
 
-A full-stack e-commerce web application inspired by Flipkart's clean white UI design.
-The project delivers a responsive online store with a dynamic 139-product catalog, persistent cart management, side-by-side product comparison, and localized Indian Rupee (₹ INR) currency handling.
+A full-stack e-commerce web application built with **Python, Flask, JavaScript, HTML, and CSS**, featuring a clean, Flipkart-inspired user interface. The application provides a dynamic catalog of 139 electronics products, real-time search and filtering, persistent shopping cart management, side-by-side product comparison, and Indian Rupee (₹ INR) price formatting.
+
+---
 
 ## 🚀 Features
 
-* Flipkart-inspired clean white user interface
-* Dynamic catalog with 139 electronics items
-* Real-time search and category filtering
-* Persistent shopping cart using browser `localStorage`
-* Side-by-side product comparison matrix
-* Automated Indian Rupee (₹ INR) currency formatting
-* RESTful API endpoints for product data ingestion
-* Lightweight backend routing and template rendering
-* Fully responsive layout across desktop, tablet, and mobile
+- **Modern E-Commerce UI:** Clean, responsive storefront inspired by Flipkart's white design.
+- **Dynamic Product Catalog:** Browse 139 electronics products across multiple categories.
+- **Real-Time Search:** Find products instantly without reloading the page.
+- **Category Filtering:** Filter products by category.
+- **Persistent Shopping Cart:** Add, remove, and update product quantities using browser `localStorage`.
+- **Product Comparison:** Compare multiple products side by side based on price, specifications, and features.
+- **Indian Currency Formatting:** Display prices in Indian Rupees (₹) using the Indian numbering system.
+- **RESTful API:** Retrieve product collections and individual product details through Flask endpoints.
+- **Responsive Design:** Adapt the interface to desktop, tablet, and mobile screens.
+- **JSON-Based Data Storage:** Manage product catalog data through a structured JSON file.
+- **Dynamic UI Updates:** Update product listings, cart totals, and comparison views through JavaScript.
+
+---
 
 ## 🛠️ Technologies Used
 
-* **Python 3.8+**
-* **Flask & Jinja2**
-* **JavaScript (ES6+)**
-* **HTML5 & CSS3 (Flexbox / Grid)**
-* **JSON File Handling**
-* **Browser LocalStorage**
+- **Python 3.8+** — Backend programming
+- **Flask** — Web framework and routing
+- **Jinja2** — HTML template rendering
+- **JavaScript (ES6+)** — Frontend logic and DOM manipulation
+- **HTML5** — Web page structure
+- **CSS3** — Responsive layouts using Flexbox and Grid
+- **JSON** — Product catalog storage and API responses
+- **Browser LocalStorage** — Persistent client-side cart state
+- **Virtual Environment (`venv`)** — Python dependency isolation
+
+---
 
 ## 📂 Project Structure
 
 ```text
 Electronic-Shop-Website/
 │
-├── app.py                     # Main Flask backend application
-├── products.json              # Persistent database containing all 139 items
-├── requirements.txt           # Python dependencies list
+├── app.py                     # Flask backend application
+├── products.json              # Product catalog containing 139 items
+├── requirements.txt           # Python dependencies
 │
 ├── templates/
-│   └── index.html             # Main storefront HTML template
+│   └── index.html             # Main storefront template
 │
-└── static/
-    ├── style.css              # Main stylesheet (Flipkart-inspired white theme)
-    ├── app.js                 # Frontend interactions (catalog, cart, compare, INR conversion)
-    └── images/                # Local asset and product image storage
-
+├── static/
+│   ├── style.css              # Responsive storefront styling
+│   ├── app.js                 # Search, cart, comparison, and UI logic
+│   └── images/                # Product images and static assets
+│
+└── README.md                  # Project documentation
 ```
+
+---
 
 ## 📌 Functionalities
 
-### Product Catalog Exploration
+### 1. Product Catalog
 
-Displays all 139 electronic items categorized into smartphones, laptops, audio peripherals, wearables, and accessories with clear pricing, ratings, and specifications.
+Displays 139 electronics products across categories such as:
 
-### Search and Filtering
+- Smartphones
+- Laptops
+- Audio peripherals
+- Wearables
+- Accessories
 
-Enables instant client-side text search and category-wise filtering with zero page reload overhead.
+Product listings present relevant details, including product names, prices, ratings, and specifications, according to the available catalog data.
 
-### Cart Management
+### 2. Search and Category Filtering
 
-Allows users to add items, increment/decrement quantities, delete items, and view real-time subtotal calculations backed by `localStorage` persistence.
+Enables users to search products by text and filter the catalog by category.
 
-### Product Comparison
+- Updates displayed products dynamically.
+- Combines search and category filtering where supported.
+- Avoids full-page reloads during client-side filtering.
 
-Enables side-by-side specification, feature, and price comparison across multiple electronics items to help buyers make informed decisions.
+### 3. Shopping Cart Management
 
-### Currency Standardization
+Provides an interactive cart with persistent state using browser `localStorage`.
 
-Converts and formats product prices according to the standard Indian numbering system (Lakhs and Crores) with the `₹` symbol.
+- Add products to the cart.
+- Increase or decrease quantities.
+- Remove products.
+- Calculate subtotals and the overall cart total.
+- Restore saved cart state after refreshing or reopening the browser.
 
-### Backend Data Handling
+**Note:** `localStorage` persists data in the user's browser. It does not provide server-side cart synchronization across devices or accounts.
 
-Uses Flask routes to deliver rendered HTML templates and serve structured product data through REST endpoints:
+### 4. Product Comparison
 
-* `GET /` — Serves the main storefront interface
-* `GET /api/products` — Returns complete product list in JSON format
-* `GET /api/products/<id>` — Returns specific product details by ID
+Allows users to compare selected electronics products side by side.
+
+- Review product prices and specifications.
+- Identify differences between product features.
+- Evaluate available product information in a comparison matrix.
+
+### 5. Indian Rupee Currency Formatting
+
+Formats prices using the ₹ symbol and Indian number-grouping conventions.
+
+Example:
+
+```javascript
+const formatINR = (amount) =>
+    new Intl.NumberFormat("en-IN", {
+        style: "currency",
+        currency: "INR",
+        maximumFractionDigits: 2
+    }).format(amount);
+```
+
+Example output: `₹1,25,000.00`
+
+The displayed precision can be adjusted to match the application's pricing requirements.
+
+### 6. Backend and RESTful API
+
+The Flask backend renders the storefront and provides product information through API endpoints.
+
+| Endpoint | Method | Description |
+|---|---|---|
+| `/` | `GET` | Renders the main storefront |
+| `/api/products` | `GET` | Returns the product catalog in JSON format |
+| `/api/products/<id>` | `GET` | Returns details for a specific product ID |
+
+The individual-product endpoint should return an appropriate `404 Not Found` response when the requested product does not exist.
+
+### 7. Responsive User Interface
+
+Uses CSS Flexbox, Grid, and responsive styling to adapt the storefront to different screen sizes while maintaining usability across desktop, tablet, and mobile devices.
+
+---
+
+## ⚙️ Getting Started
+
+### Prerequisites
+
+Install the following:
+
+- Python 3.8 or later
+- pip, the Python package installer
+- Git, if cloning the repository
+
+Verify your installation:
+
+```bash
+python --version
+pip --version
+git --version
+```
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/dhananjaychaudhary99/Electronic-Shop-Website.git
+```
+
+### 2. Navigate to the Project Directory
+
+```bash
+cd Electronic-Shop-Website
+```
+
+### 3. Create a Virtual Environment
+
+**Windows PowerShell:**
+
+```powershell
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+```
+
+**Windows Command Prompt:**
+
+```bat
+python -m venv venv
+venv\Scripts\activate.bat
+```
+
+**Linux / macOS:**
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### 4. Install Dependencies
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+### 5. Start the Flask Application
+
+```bash
+python app.py
+```
+
+### 6. Open the Website
+
+Visit the following address in your browser:
+
+**http://127.0.0.1:5000/**
+
+The application will be available locally while the Flask development server is running.
+
+---
 
 ## 📚 Learning Outcomes
 
 Through this project, I gained practical experience in:
 
-* Building full-stack web applications with Flask and Vanilla JS
-* Structuring RESTful API endpoints and handling JSON data
-* Client-side state persistence using `localStorage`
-* Dynamic DOM manipulation and modular JavaScript architecture
-* Replicating modern, production-grade e-commerce UI patterns
-* Managing dependencies and local development environments with `venv`
+- Developing full-stack web applications using Python and Flask.
+- Creating RESTful API endpoints for structured product data.
+- Rendering dynamic HTML templates with Jinja2.
+- Building interactive interfaces using vanilla JavaScript.
+- Managing browser-side state with `localStorage`.
+- Implementing search, category filtering, and product comparison.
+- Formatting prices according to Indian currency conventions.
+- Designing responsive layouts using CSS Flexbox and Grid.
+- Organizing frontend assets and backend application logic.
+- Managing Python dependencies and virtual environments.
+- Separating product data from application logic using JSON.
 
-## 🚀 Deployment
+---
 
-* **Local Web Server:** `http://127.0.0.1:5000/`
-* **Static Deployment (GitHub Pages):** [View Static Site](https://dhananjaychaudhary99.github.io/Electronic-Shop-Website/)
+## 🌐 Deployment
+
+- **Local Development:** [http://127.0.0.1:5000/](http://127.0.0.1:5000/)
+- **GitHub Repository:** [Electronic Shop Website](https://github.com/dhananjaychaudhary99/Electronic-Shop-Website)
+- **GitHub Pages:** [View Static Deployment](https://dhananjaychaudhary99.github.io/Electronic-Shop-Website/)
+
+**Deployment note:** GitHub Pages supports static HTML, CSS, and JavaScript but does not execute a Python Flask backend. Therefore, Flask API functionality requires a compatible Python hosting platform. A GitHub Pages version can provide a static storefront if its frontend and product data are configured to work without Flask.
+
+---
 
 ## 🔮 Future Improvements
 
-* SQLite / PostgreSQL database migration
-* User authentication and authorization (JWT)
-* Payment gateway sandbox integration (Razorpay / Stripe)
-* Admin dashboard for product inventory management
-* Order history and tracking portal
+- **Database Integration:** Replace JSON-based catalog storage with SQLite or PostgreSQL.
+- **User Authentication:** Add secure registration, login, and authorization.
+- **Payment Integration:** Implement sandbox payments using Razorpay or Stripe.
+- **Admin Dashboard:** Manage products, prices, categories, and inventory.
+- **Order Management:** Add order placement, order history, and shipment tracking.
+- **Wishlist:** Allow users to save products for later.
+- **Inventory Management:** Track available stock and prevent invalid purchases.
+- **Backend Cart Persistence:** Synchronize carts across authenticated devices.
+- **Security Enhancements:** Validate inputs, protect sensitive endpoints, and apply appropriate CSRF and authorization controls.
+- **Testing:** Add automated tests for API endpoints, cart calculations, filtering, and comparison.
+- **Production Deployment:** Configure environment variables, logging, error handling, and a production-ready WSGI server.
+
+---
 
 ## 👨‍💻 Author
 
 **Dhananjay Chaudhary**
 
-* GitHub: [Electronic-Shop-Website](https://github.com/dhananjaychaudhary99/Electronic-Shop-Website)
+- **GitHub Profile:** [dhananjaychaudhary99](https://github.com/dhananjaychaudhary99)
+- **Project Repository:** [Electronic Shop Website](https://github.com/dhananjaychaudhary99/Electronic-Shop-Website)
+
+---
 
 ## 📄 License
 
-This project is open-source and available under the **MIT License**.
+This project is intended to be available under the **MIT License**. Check the repository's `LICENSE` file to verify the applicable terms before redistributing or modifying the project.
 
-```
+---
 
-```
+## ⭐ Support
+
+If you find this project useful, consider starring the repository on GitHub.
+
+**Built with Python, Flask, and JavaScript to demonstrate full-stack web development, interactive e-commerce features, and responsive UI design.**
